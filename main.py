@@ -569,7 +569,7 @@ async def verify(interaction: discord.Interaction):
         title="☕ Vérification",
         description=(
             "Bienvenue dans notre monde plein de magie !\n\n"
-            "*Notre règlement est soumis aux conditions d'utilisation de la plateforme Discord.*"
+            "*Notre règlement est soumis aux conditions d'utilisation de la plateforme Discord.*\n\n"
             "Clique sur le bouton ci-dessous pour accéder au serveur."
         ),
         color=discord.Color.from_rgb(111, 78, 55)
