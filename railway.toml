@@ -1,5 +1,0 @@
-[build]
-builder = "RAILPACK"
-
-[variables]
-RAILPACK_PYTHON_VERSION = "3.11"
