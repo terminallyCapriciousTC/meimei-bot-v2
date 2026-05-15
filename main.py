@@ -403,34 +403,27 @@ async def setwelcome(interaction: discord.Interaction, channel: discord.TextChan
 @bot.event
 async def on_member_join(member):
 
+    # ======================
+    # WELCOME
+    # ======================
+
     cfg = welcome.get(str(member.guild.id))
-    if not cfg:
-        return
 
-    channel = member.guild.get_channel(cfg["channel"])
-    embed = embeds.get(cfg["embed"])
+    if cfg:
+        channel = member.guild.get_channel(cfg["channel"])
+        embed = embeds.get(cfg["embed"])
 
-    if channel and embed:
-        await channel.send(embed=parse_embed(embed, member))
+        if channel and embed:
+            await channel.send(
+                embed=parse_embed(embed, member)
+            )
 
+    # ======================
+    # AUTO ROLE
+    # ======================
 
-ROLE_ID = 1501634520905154630
-MESSAGE_ID = 1504151952899182739
-EMOJI = "☕"
-
-# ======================
-# READY
-# ======================
-@bot.event
-async def on_ready():
-    print(f"Connecté en tant que {bot.user}")
-
-# ======================
-# AUTO ROLE JOIN
-# ======================
-@bot.event
-async def on_member_join(member):
     role = member.guild.get_role(1504218303038623906)
+
     if role:
         await member.add_roles(role)
         print(f"{member} a reçu le rôle {role.name}")
