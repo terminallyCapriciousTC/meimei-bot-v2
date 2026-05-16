@@ -555,7 +555,7 @@ class VerifyView(discord.ui.View):
     async def verify_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         
         guild = interaction.guild
-         member = interaction.user
+        member = interaction.user
          
          verify_role = guild.get_role(ROLE_ID)
          unverified_role = guild.get_role(UNVERIFIED_ROLE_ID)
