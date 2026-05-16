@@ -545,8 +545,8 @@ UNVERIFIED_ROLE_ID = 1504218303038623906
 class VerifyView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
-
-@discord.ui.button(
+        
+    @discord.ui.button(
     label="Vérification",
     emoji="☕",
     style=discord.ButtonStyle.success,
