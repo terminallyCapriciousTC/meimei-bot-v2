@@ -9,8 +9,8 @@ intents.members = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-EMBEDS_FILE = "embeds.json"
-WELCOME_FILE = "welcome.json"
+EMBEDS_FILE = "/data/embeds.json"
+WELCOME_FILE = "/data/welcome.json"
 
 embeds = {}
 welcome = {}
