@@ -24,32 +24,62 @@ def is_admin(interaction: discord.Interaction):
 
 
 def load_data():
+
     global embeds, welcome
 
-    if os.path.exists(EMBEDS_FILE):
-        with open(EMBEDS_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            for name, e in data.items():
-                embeds[name] = discord.Embed.from_dict(e)
+    try:
 
-    if os.path.exists(WELCOME_FILE):
-        with open(WELCOME_FILE, "r", encoding="utf-8") as f:
-            welcome.update(json.load(f))
+        if os.path.exists(EMBEDS_FILE):
+
+            with open(EMBEDS_FILE, "r", encoding="utf-8") as f:
+
+                data = json.load(f)
+
+                for name, e in data.items():
+
+                    try:
+                        embeds[name] = discord.Embed.from_dict(e)
+
+                    except Exception as err:
+                        print(f"Erreur chargement {name}:", err)
+
+        print(f"{len(embeds)} embeds chargés")
+
+    except Exception as e:
+        print("LOAD ERROR:", e)
+
+    try:
+
+        if os.path.exists(WELCOME_FILE):
+
+            with open(WELCOME_FILE, "r", encoding="utf-8") as f:
+                welcome.update(json.load(f))
+
+    except Exception as e:
+        print("WELCOME LOAD ERROR:", e)
 
 
 def save_embeds():
+
     try:
+
+        data = {}
+
+        for k, v in embeds.items():
+
+            try:
+                data[k] = v.to_dict()
+
+            except Exception as e:
+                print(f"Erreur embed {k}:", e)
+
         with open(EMBEDS_FILE, "w", encoding="utf-8") as f:
-            json.dump(
-                {k: v.to_dict() for k, v in embeds.items()},
-                f,
-                indent=2
-            )
+            json.dump(data, f, indent=2)
 
         print("Embeds sauvegardés")
 
     except Exception as e:
-        print("ERREUR SAVE EMBEDS:", e)
+        print("SAVE EMBEDS ERROR:", e)
 
 
 def save_welcome():
