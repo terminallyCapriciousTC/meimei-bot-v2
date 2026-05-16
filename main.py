@@ -352,6 +352,40 @@ class FieldModal(BaseModal, title="Ajouter un Field"):
 embed_group = app_commands.Group(name="embed", description="Gestion embeds")
 bot.tree.add_command(embed_group)
 
+@embed_group.command(name="rule")
+async def rule(interaction: discord.Interaction, channel: discord.TextChannel):
+    if not is_admin(interaction):
+        return await interaction.response.send_message("No permission", ephemeral=True)
+
+    # Banner embed (image seule)
+    banner = discord.Embed()
+    banner.set_image(url="https://ton-lien-banner.png")
+
+    # Rules embed
+    rules = discord.Embed(
+        title="📜 Règlement du serveur",
+        description="Le règlement complet du serveur est disponible ci-dessous.",
+        color=discord.Color.from_rgb(111, 78, 55)
+    )
+
+    rules.add_field(
+        name="━━━ 🌸 • Une communauté 100% francophone • ✧",
+        value="Ici tu peux mettre ton texte de règle détaillé.",
+        inline=False
+    )
+
+    rules.add_field(
+        name="━━━ ⚖️ • Respect obligatoire • ✧",
+        value="Pas d'insultes, pas de harcèlement, etc.",
+        inline=False
+    )
+
+    await channel.send(embeds=[banner, rules])
+
+    await interaction.response.send_message(
+        "Règlement envoyé ✅",
+        ephemeral=True
+    )
 
 @embed_group.command(name="create")
 async def create(interaction: discord.Interaction):
