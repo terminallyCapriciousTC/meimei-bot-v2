@@ -357,14 +357,13 @@ async def rule(interaction: discord.Interaction, channel: discord.TextChannel):
     if not is_admin(interaction):
         return await interaction.response.send_message("No permission", ephemeral=True)
 
-    # Banner (comme ton gros titre stylé)
-    banner = discord.Embed()
-    banner.set_image(url="https://cdn.discordapp.com/attachments/760597303122984970/1505266984248545372/Reglements_1.png?ex=6a0a009f&is=6a08af1f&hm=97c4510bb5abbabb1d1073e260213ce65d864c9a32ac61ef43ab2c217edc9a43&")
-
     rules = discord.Embed(
         title="🌸 Engagement",
         color=discord.Color.from_rgb(111, 78, 55)
     )
+
+    # 🔥 BANNIÈRE EN HAUT DE L'EMBED
+    rules.set_image(url="https://cdn.discordapp.com/attachments/760597303122984970/1505266984248545372/Reglements_1.png")
 
     rules.add_field(
         name="👑 • Nos engagements",
@@ -393,7 +392,7 @@ async def rule(interaction: discord.Interaction, channel: discord.TextChannel):
 
     rules.set_thumbnail(url="https://cdn-icons-png.flaticon.com/512/471/471664.png")
 
-    await channel.send(embeds=[banner, rules])
+    await channel.send(embed=rules)
 
     await interaction.response.send_message("Règlement envoyé ✅", ephemeral=True)
 
