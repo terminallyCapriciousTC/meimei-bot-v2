@@ -301,7 +301,6 @@ async def edit(interaction: discord.Interaction, name: str):
     if name not in embeds:
         return await interaction.response.send_message(
             "Embed introuvable",
-            ephemeral=True
         )
 
     existing = embeds[name]
@@ -328,6 +327,7 @@ async def edit(interaction: discord.Interaction, name: str):
     await interaction.response.send_message(
         embed=sess.embed,
         view=view,
+        ephemeral=true
     )
 
 class EmbedSelect(discord.ui.Select):
