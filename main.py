@@ -577,7 +577,7 @@ class VerifyView(discord.ui.View):
             try:
                 await member.remove_roles(unverified_role)
             except Exception as e:
-            print("Erreur remove Non Vérifié:", e)
+                print("Erreur remove Non Vérifié:", e)
             
         # :green_circle: ajoute rôle Membres
         try:
