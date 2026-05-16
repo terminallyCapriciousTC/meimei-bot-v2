@@ -352,50 +352,6 @@ class FieldModal(BaseModal, title="Ajouter un Field"):
 embed_group = app_commands.Group(name="embed", description="Gestion embeds")
 bot.tree.add_command(embed_group)
 
-@embed_group.command(name="rule")
-async def rule(interaction: discord.Interaction, channel: discord.TextChannel):
-    if not is_admin(interaction):
-        return await interaction.response.send_message("No permission", ephemeral=True)
-
-    rules = discord.Embed(
-        title="🌸 Engagement",
-        color=discord.Color.from_rgb(111, 78, 55)
-    )
-
-    # 🔥 BANNIÈRE EN HAUT DE L'EMBED
-    rules.set_image(url="https://cdn.discordapp.com/attachments/760597303122984970/1505266984248545372/Reglements_1.png")
-
-    rules.add_field(
-        name="👑 • Nos engagements",
-        value=(
-            "> La qualité avant tout — Notre serveur s'engage à maintenir une plateforme\n"
-            "> saine, sécurisée et respectueuse pour l'ensemble de la communauté."
-        ),
-        inline=False
-    )
-
-    rules.add_field(
-        name="━━━━━━━━━━━━━━━━━━",
-        value="",
-        inline=False
-    )
-
-    rules.add_field(
-        name="🛡️ • Notre approche",
-        value=(
-            "» Nous privilégions la qualité à la quantité.\n"
-            "» Chaque serveur est vérifié manuellement.\n"
-            "» Nous assurons une expérience sécurisée."
-        ),
-        inline=False
-    )
-
-    rules.set_thumbnail(url="https://cdn-icons-png.flaticon.com/512/471/471664.png")
-
-    await channel.send(embed=rules)
-
-    await interaction.response.send_message("Règlement envoyé ✅", ephemeral=True)
-
 @embed_group.command(name="create")
 async def create(interaction: discord.Interaction):
     if not is_admin(interaction):
@@ -536,10 +492,6 @@ async def setwelcome(interaction: discord.Interaction, channel: discord.TextChan
 @bot.event
 async def on_member_join(member):
 
-    # ======================
-    # WELCOME
-    # ======================
-
     cfg = welcome.get(str(member.guild.id))
 
     if cfg:
@@ -550,12 +502,7 @@ async def on_member_join(member):
             await channel.send(
                 content=f"\n\n# <a:5707lightpurplecheck:1505186461773991936> Bienvenue au Coven du rôliste, {member.mention} !",
                 embed=parse_embed(embed, member)
-                )
-
-
-    # ======================
-    # AUTO ROLE
-    # ======================
+            )
 
     role = member.guild.get_role(1504218303038623906)
 
@@ -563,9 +510,7 @@ async def on_member_join(member):
         await member.add_roles(role)
         print(f"{member} a reçu le rôle {role.name}")
 
-# ======================
-# REACTION ADD
-# ======================
+
 @bot.event
 async def on_raw_reaction_add(payload):
 
@@ -589,9 +534,7 @@ async def on_raw_reaction_add(payload):
 
     await member.add_roles(role)
 
-# ======================
-# REACTION REMOVE
-# ======================
+
 @bot.event
 async def on_raw_reaction_remove(payload):
 
@@ -615,105 +558,69 @@ async def on_raw_reaction_remove(payload):
 
     await member.remove_roles(role)
 
-# =========================
-# CONFIG
-# =========================
 
-# 👉 ID du rôle donné après vérification
-ROLE_ID = 1504214645584695397  
-UNVERIFIED_ROLE_ID = 1504218303038623906  
-
-# =========================
-# VIEW BOUTON
-# =========================
 class VerifyView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
-        
+
     @discord.ui.button(
-    label="Vérification",
-    emoji="☕",
-    style=discord.ButtonStyle.success,
-    custom_id="verify_button"
+        label="Vérification",
+        emoji="☕",
+        style=discord.ButtonStyle.success,
+        custom_id="verify_button"
     )
     async def verify_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        
+
         guild = interaction.guild
         member = interaction.user
-         
+
         verify_role = guild.get_role(ROLE_ID)
         unverified_role = guild.get_role(UNVERIFIED_ROLE_ID)
-         
+
         if verify_role is None:
             return await interaction.response.send_message(
-            "Rôle Membres introuvable.",
-            ephemeral=True
-        )
-            
+                "Rôle Membres introuvable.",
+                ephemeral=True
+            )
+
         if verify_role in member.roles:
             return await interaction.response.send_message(
-            "Tu es déjà vérifié ☕",
-            ephemeral=True
-        )
-            
-        # :yellow_circle: retire rôle Non Vérifié
+                "Tu es déjà vérifié ☕",
+                ephemeral=True
+            )
+
         if unverified_role and unverified_role in member.roles:
             try:
                 await member.remove_roles(unverified_role)
             except Exception as e:
                 print("Erreur remove Non Vérifié:", e)
-            
-        # :green_circle: ajoute rôle Membres
+
         try:
             await member.add_roles(verify_role)
         except Exception as e:
             print("Erreur add role:", e)
-            
+
         await interaction.response.send_message(
             "Vérification réussie ☕",
             ephemeral=True
-    )
+        )
 
-# =========================
-# READY
-# =========================
+
 @bot.event
 async def on_ready():
 
-    print("VerifyView loaded")
-
-    print("TEST DATA")
-
-    print("DATA EXISTS:", os.path.exists("/data"))
-
-    try:
-        with open("/data/test.txt", "w") as f:
-            f.write("ok")
-
-        print("WRITE OK")
-
-    except Exception as e:
-        print("WRITE ERROR:", e)
-
-    # Charge les embeds + config welcome
     load_data()
-
-    # Recharge les boutons même après reboot
     bot.add_view(VerifyView())
 
-    # Sync slash commands
     try:
         synced = await bot.tree.sync()
         print(f"{len(synced)} commandes synchronisées")
-
     except Exception as e:
         print(e)
 
     print(f"Connecté en tant que {bot.user}")
 
-# =========================
-# /VERIFY
-# =========================
+
 @bot.tree.command(
     name="verify",
     description="Envoie le panneau de vérification"
@@ -731,14 +638,12 @@ async def verify(interaction: discord.Interaction):
         color=discord.Color.from_rgb(111, 78, 55)
     )
 
-    embed.set_footer(
-        text="Prêt pour de nouvelles aventures ?"
-    )
+    embed.set_footer(text="Prêt pour de nouvelles aventures ?")
 
     await interaction.response.send_message(
         embed=embed,
         view=VerifyView()
     )
 
-import os
+
 bot.run(os.environ["TOKEN"])
