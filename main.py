@@ -552,6 +552,19 @@ class VerifyView(discord.ui.View):
 @bot.event
 async def on_ready():
 
+    print("TEST DATA")
+
+    print("DATA EXISTS:", os.path.exists("/data"))
+
+    try:
+        with open("/data/test.txt", "w") as f:
+            f.write("ok")
+
+        print("WRITE OK")
+
+    except Exception as e:
+        print("WRITE ERROR:", e)
+
     # Charge les embeds + config welcome
     load_data()
 
@@ -562,6 +575,7 @@ async def on_ready():
     try:
         synced = await bot.tree.sync()
         print(f"{len(synced)} commandes synchronisées")
+
     except Exception as e:
         print(e)
 
