@@ -546,35 +546,32 @@ class VerifyView(discord.ui.View):
         super().__init__(timeout=None)
 
     @discord.ui.button(
-        label="Vérification",
-        emoji="☕",
-        style=discord.ButtonStyle.success,
-        custom_id="verify_button"
-    )
-    async def verify_button(
-        self,
-        interaction: discord.Interaction,
-        button: discord.ui.Button
-    ):
+    label="Vérification",
+    emoji="☕",
+    style=discord.ButtonStyle.success,
+    custom_id="verify_button"
+)
+async def verify_button(
+    self,
+    interaction: discord.Interaction,
+    button: discord.ui.Button
+):
 
-        role = interaction.guild.get_role(ROLE_ID)
+    guild = interaction.guild
+    member = interaction.user
 
-        if role is None:
-            return await interaction.response.send_message(
-                "Rôle introuvable.",
-                ephemeral=True
-            )
+    verify_role = guild.get_role(1504214645584695397)
 
-        if role in interaction.user.roles:
-            return await interaction.response.send_message(
-                "Tu es déjà vérifié ☕",
-                ephemeral=True
-            )
+    if verify_role is None:
+        return await interaction.response.send_message(
+            "Rôle de vérification introuvable.",
+            ephemeral=True
+        )
 
-        await interaction.user.add_roles(role)
-
-        await interaction.response.send_message(
-            "Vérification réussie ☕",
+    # déjà vérifié
+    if verify_role in member.roles:
+        return await interaction.response.send_message(
+            "Tu es déjà vérifié ☕",
             ephemeral=True
         )
 
