@@ -551,44 +551,43 @@ class VerifyView(discord.ui.View):
     emoji="☕",
     style=discord.ButtonStyle.success,
     custom_id="verify_button"
-)
-
-async def verify_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-
-    guild = interaction.guild
-    member = interaction.user
-
-    verify_role = guild.get_role(ROLE_ID)
-    unverified_role = guild.get_role(UNVERIFIED_ROLE_ID)
-
-    if verify_role is None:
-        return await interaction.response.send_message(
-            "Rôle Membres introuvable.",
-            ephemeral=True
-        )
-
-    if verify_role in member.roles:
-        return await interaction.response.send_message(
-            "Tu es déjà vérifié ☕",
-            ephemeral=True
-        )
-
-    # :yellow_circle: retire rôle Non Vérifié
-    if unverified_role and unverified_role in member.roles:
+    )
+    async def verify_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        
+        guild = interaction.guild
+         member = interaction.user
+         
+         verify_role = guild.get_role(ROLE_ID)
+         unverified_role = guild.get_role(UNVERIFIED_ROLE_ID)
+         
+         if verify_role is None:
+             return await interaction.response.send_message(
+              "Rôle Membres introuvable.",
+              ephemeral=True
+            )
+            
+        if verify_role in member.roles:
+            return await interaction.response.send_message(
+                "Tu es déjà vérifié ☕",
+                ephemeral=True
+            )
+            
+        # :yellow_circle: retire rôle Non Vérifié
+        if unverified_role and unverified_role in member.roles:
         try:
             await member.remove_roles(unverified_role)
         except Exception as e:
             print("Erreur remove Non Vérifié:", e)
-
-    # :green_circle: ajoute rôle Membres
-    try:
-        await member.add_roles(verify_role)
-    except Exception as e:
-        print("Erreur add role:", e)
-
-    await interaction.response.send_message(
-        "Vérification réussie ☕",
-        ephemeral=True
+            
+        # :green_circle: ajoute rôle Membres
+        try:
+            await member.add_roles(verify_role)
+        except Exception as e:
+            print("Erreur add role:", e)
+            
+        await interaction.response.send_message(
+            "Vérification réussie ☕",
+            ephemeral=True
     )
 
 # =========================
