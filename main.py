@@ -557,20 +557,20 @@ class VerifyView(discord.ui.View):
         guild = interaction.guild
         member = interaction.user
          
-         verify_role = guild.get_role(ROLE_ID)
-         unverified_role = guild.get_role(UNVERIFIED_ROLE_ID)
+        verify_role = guild.get_role(ROLE_ID)
+        unverified_role = guild.get_role(UNVERIFIED_ROLE_ID)
          
-         if verify_role is None:
-             return await interaction.response.send_message(
-              "Rôle Membres introuvable.",
-              ephemeral=True
-            )
+        if verify_role is None:
+            return await interaction.response.send_message(
+            "Rôle Membres introuvable.",
+            ephemeral=True
+        )
             
         if verify_role in member.roles:
             return await interaction.response.send_message(
-                "Tu es déjà vérifié ☕",
-                ephemeral=True
-            )
+            "Tu es déjà vérifié ☕",
+            ephemeral=True
+        )
             
         # :yellow_circle: retire rôle Non Vérifié
         if unverified_role and unverified_role in member.roles:
