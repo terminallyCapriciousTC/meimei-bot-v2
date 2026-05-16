@@ -121,7 +121,7 @@ class Session:
         self.color = None
         self.thumbnail = None
         self.image = None
-
+        self.fields = []
 
 class EmbedBuilder(discord.ui.View):
     def __init__(self, user_id):
@@ -171,6 +171,10 @@ class EmbedBuilder(discord.ui.View):
     @discord.ui.button(label="Image", style=discord.ButtonStyle.secondary)
     async def image(self, interaction, button):
         await interaction.response.send_modal(ImageModal(self))
+
+    @discord.ui.button(label="Field", style=discord.ButtonStyle.secondary)
+    async def field(self, interaction, button):
+        await interaction.response.send_modal(FieldModal(self))
 
 class NameModal(discord.ui.Modal, title="Nom embed"):
     name = discord.ui.TextInput(label="Nom")
@@ -307,6 +311,43 @@ class ImageModal(discord.ui.Modal, title="Image"):
             view=self.view
         )
 
+class FieldModal(BaseModal, title="Ajouter un Field"):
+    def __init__(self, view):
+        super().__init__(view)
+
+        self.name_input = discord.ui.TextInput(label="Nom du field")
+        self.value_input = discord.ui.TextInput(
+            label="Valeur",
+            style=discord.TextStyle.paragraph
+        )
+        self.inline_input = discord.ui.TextInput(
+            label="Inline ? (true/false)",
+            default="true"
+        )
+
+        self.add_item(self.name_input)
+        self.add_item(self.value_input)
+        self.add_item(self.inline_input)
+
+    async def on_submit(self, interaction):
+        sess = self.view.session()
+
+        inline = self.inline_input.value.lower() == "true"
+
+        sess.fields.append({
+            "name": self.name_input.value,
+            "value": self.value_input.value,
+            "inline": inline
+        })
+
+        sess.embed.add_field(
+            name=self.name_input.value,
+            value=self.value_input.value,
+            inline=inline
+        )
+
+        await self.view.auto_save()
+        await self.view.refresh(interaction)
 
 embed_group = app_commands.Group(name="embed", description="Gestion embeds")
 bot.tree.add_command(embed_group)
