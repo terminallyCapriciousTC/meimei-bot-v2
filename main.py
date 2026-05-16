@@ -415,7 +415,7 @@ async def on_member_join(member):
 
         if channel and embed:
             await channel.send(
-                content=f"Bienvenue {member.mention} 👋",
+                content=f"Bienvenue ma gueule {member.mention} 👋",
                 embed=parse_embed(embed, member)
                 )
 
