@@ -596,6 +596,8 @@ async def verify_button(self, interaction: discord.Interaction, button: discord.
 @bot.event
 async def on_ready():
 
+    print("VerifyView loaded")
+
     print("TEST DATA")
 
     print("DATA EXISTS:", os.path.exists("/data"))
