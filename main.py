@@ -328,7 +328,6 @@ async def edit(interaction: discord.Interaction, name: str):
     await interaction.response.send_message(
         embed=sess.embed,
         view=view,
-        ephemeral=True
     )
 
 class EmbedSelect(discord.ui.Select):
@@ -357,7 +356,7 @@ class DropdownView(discord.ui.View):
 
 @embed_group.command(name="show")
 async def show(interaction: discord.Interaction):
-    await interaction.response.send_message("Choisis", view=DropdownView())
+    await interaction.response.send_message("Choisis", view=DropdownView(), ephemeral=True)
 
 
 class ConfirmDelete(discord.ui.View):
