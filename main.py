@@ -537,6 +537,7 @@ async def on_raw_reaction_remove(payload):
 
 # 👉 ID du rôle donné après vérification
 ROLE_ID = 1504214645584695397
+ROLE_IDD = 1504218303038623906
 
 # =========================
 # VIEW BOUTON
@@ -575,7 +576,7 @@ async def verify_button(
         )
 
     #  RETIRE LE RÔLE CHOISI
-     remove_role = guild.get_role(1504218303038623906)
+     remove_role = guild.get_role(ROLE_IDD)
 
     if remove_role and remove_role in member.roles:
         try:
