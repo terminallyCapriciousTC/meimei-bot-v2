@@ -163,6 +163,7 @@ class EmbedBuilder(discord.ui.View):
     @discord.ui.button(label="Save", style=discord.ButtonStyle.green)
     async def save(self, interaction, button):
         sess = self.session()
+        print("SAVE CLICKED:", sess.name)
         embeds[sess.name] = sess.embed.copy()
         save_embeds()
         await interaction.response.send_message("Embed sauvegardé", ephemeral=True)
