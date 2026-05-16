@@ -551,6 +551,7 @@ class VerifyView(discord.ui.View):
     style=discord.ButtonStyle.success,
     custom_id="verify_button"
 )
+
 async def verify_button(
     self,
     interaction: discord.Interaction,
