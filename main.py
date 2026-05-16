@@ -463,8 +463,7 @@ async def on_member_join(member):
 
         if channel and embed:
             await channel.send(
-                content=f"\n\n
-                # Bienvenue {member.mention} <:20096wizardpotion2:1505186363534868530>",
+                content=f"\n\n# Bienvenue {member.mention} <:20096wizardpotion2:1505186363534868530>",
                 embed=parse_embed(embed, member)
                 )
 
