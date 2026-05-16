@@ -4,6 +4,8 @@ from discord import app_commands
 import json
 import os
 
+os.makedirs("/data", exist_ok=True)
+
 intents = discord.Intents.all()
 intents.members = True
 
@@ -36,13 +38,29 @@ def load_data():
 
 
 def save_embeds():
-    with open(EMBEDS_FILE, "w", encoding="utf-8") as f:
-        json.dump({k: v.to_dict() for k, v in embeds.items()}, f, indent=2)
+    try:
+        with open(EMBEDS_FILE, "w", encoding="utf-8") as f:
+            json.dump(
+                {k: v.to_dict() for k, v in embeds.items()},
+                f,
+                indent=2
+            )
+
+        print("Embeds sauvegardés")
+
+    except Exception as e:
+        print("ERREUR SAVE EMBEDS:", e)
 
 
 def save_welcome():
-    with open(WELCOME_FILE, "w", encoding="utf-8") as f:
-        json.dump(welcome, f, indent=2)
+    try:
+        with open(WELCOME_FILE, "w", encoding="utf-8") as f:
+            json.dump(welcome, f, indent=2)
+
+        print("Welcome sauvegardé")
+
+    except Exception as e:
+        print("ERREUR SAVE WELCOME:", e)
 
 
 async def embed_autocomplete(interaction: discord.Interaction, current: str):
@@ -339,7 +357,7 @@ class DropdownView(discord.ui.View):
 
 @embed_group.command(name="show")
 async def show(interaction: discord.Interaction):
-    await interaction.response.send_message("Choisis", view=DropdownView(), ephemeral=True)
+    await interaction.response.send_message("Choisis", view=DropdownView())
 
 
 class ConfirmDelete(discord.ui.View):
