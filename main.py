@@ -536,8 +536,8 @@ async def on_raw_reaction_remove(payload):
 # =========================
 
 # 👉 ID du rôle donné après vérification
-ROLE_ID = 1504214645584695397
-ROLE_IDD = 1504218303038623906
+ROLE_ID = 1504214645584695397  
+UNVERIFIED_ROLE_ID = 1504218303038623906  
 
 # =========================
 # VIEW BOUTON
@@ -552,45 +552,44 @@ class VerifyView(discord.ui.View):
     style=discord.ButtonStyle.success,
     custom_id="verify_button"
 )
-async def verify_button(
-    self,
-    interaction: discord.Interaction,
-    button: discord.ui.Button
-):
+async def verify_button(self, interaction: discord.Interaction, button: discord.ui.Button):
 
     guild = interaction.guild
     member = interaction.user
 
-    role = guild.get_role(ROLE_ID)
+    verify_role = guild.get_role(ROLE_ID)
+    unverified_role = guild.get_role(UNVERIFIED_ROLE_ID)
 
-    if role is None:
+    if verify_role is None:
         return await interaction.response.send_message(
-            "Rôle introuvable.",
+            "Rôle Membres introuvable.",
             ephemeral=True
         )
 
-    if role in member.roles:
+    if verify_role in member.roles:
         return await interaction.response.send_message(
             "Tu es déjà vérifié ☕",
             ephemeral=True
         )
 
-    #  RETIRE LE RÔLE CHOISI
-     remove_role = guild.get_role(ROLE_IDD)
-
-    if remove_role and remove_role in member.roles:
+    # :yellow_circle: retire rôle Non Vérifié
+    if unverified_role and unverified_role in member.roles:
         try:
-            await member.remove_roles(remove_role)
+            await member.remove_roles(unverified_role)
         except Exception as e:
-            print("Erreur remove role:", e)
+            print("Erreur remove Non Vérifié:", e)
 
-    #  AJOUT DU RÔLE DE VÉRIFICATION
-    await member.add_roles(role)
+    # :green_circle: ajoute rôle Membres
+    try:
+        await member.add_roles(verify_role)
+    except Exception as e:
+        print("Erreur add role:", e)
 
     await interaction.response.send_message(
         "Vérification réussie ☕",
         ephemeral=True
     )
+
 # =========================
 # READY
 # =========================
