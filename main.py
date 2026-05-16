@@ -359,7 +359,7 @@ async def rule(interaction: discord.Interaction, channel: discord.TextChannel):
 
     # Banner embed (image seule)
     banner = discord.Embed()
-    banner.set_image(url="https://ton-lien-banner.png")
+    banner.set_image(url="https://cdn.discordapp.com/attachments/760597303122984970/1505266984248545372/Reglements_1.png?ex=6a0a009f&is=6a08af1f&hm=97c4510bb5abbabb1d1073e260213ce65d864c9a32ac61ef43ab2c217edc9a43&")
 
     # Rules embed
     rules = discord.Embed(
