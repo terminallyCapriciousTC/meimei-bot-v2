@@ -357,35 +357,45 @@ async def rule(interaction: discord.Interaction, channel: discord.TextChannel):
     if not is_admin(interaction):
         return await interaction.response.send_message("No permission", ephemeral=True)
 
-    # Banner embed (image seule)
+    # Banner (comme ton gros titre stylé)
     banner = discord.Embed()
     banner.set_image(url="https://cdn.discordapp.com/attachments/760597303122984970/1505266984248545372/Reglements_1.png?ex=6a0a009f&is=6a08af1f&hm=97c4510bb5abbabb1d1073e260213ce65d864c9a32ac61ef43ab2c217edc9a43&")
 
-    # Rules embed
     rules = discord.Embed(
-        title="📜 Règlement du serveur",
-        description="Le règlement complet du serveur est disponible ci-dessous.",
+        title="🌸 Engagement",
         color=discord.Color.from_rgb(111, 78, 55)
     )
 
     rules.add_field(
-        name="━━━ 🌸 • Une communauté 100% francophone • ✧",
-        value="Ici tu peux mettre ton texte de règle détaillé.",
+        name="👑 • Nos engagements",
+        value=(
+            "> La qualité avant tout — Notre serveur s'engage à maintenir une plateforme\n"
+            "> saine, sécurisée et respectueuse pour l'ensemble de la communauté."
+        ),
         inline=False
     )
 
     rules.add_field(
-        name="━━━ ⚖️ • Respect obligatoire • ✧",
-        value="Pas d'insultes, pas de harcèlement, etc.",
+        name="━━━━━━━━━━━━━━━━━━",
+        value="",
         inline=False
     )
 
+    rules.add_field(
+        name="🛡️ • Notre approche",
+        value=(
+            "» Nous privilégions la qualité à la quantité.\n"
+            "» Chaque serveur est vérifié manuellement.\n"
+            "» Nous assurons une expérience sécurisée."
+        ),
+        inline=False
+    )
+
+    rules.set_thumbnail(url="https://cdn-icons-png.flaticon.com/512/471/471664.png")
+
     await channel.send(embeds=[banner, rules])
 
-    await interaction.response.send_message(
-        "Règlement envoyé ✅",
-        ephemeral=True
-    )
+    await interaction.response.send_message("Règlement envoyé ✅", ephemeral=True)
 
 @embed_group.command(name="create")
 async def create(interaction: discord.Interaction):
