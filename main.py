@@ -545,39 +545,51 @@ class VerifyView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(
-        label="Vérification",
-        emoji="☕",
-        style=discord.ButtonStyle.success,
-        custom_id="verify_button"
-    )
-    async def verify_button(
-        self,
-        interaction: discord.Interaction,
-        button: discord.ui.Button
-    ):
+@discord.ui.button(
+    label="Vérification",
+    emoji="☕",
+    style=discord.ButtonStyle.success,
+    custom_id="verify_button"
+)
+async def verify_button(
+    self,
+    interaction: discord.Interaction,
+    button: discord.ui.Button
+):
 
-        role = interaction.guild.get_role(ROLE_ID)
+    guild = interaction.guild
+    member = interaction.user
 
-        if role is None:
-            return await interaction.response.send_message(
-                "Rôle introuvable.",
-                ephemeral=True
-            )
+    role = guild.get_role(ROLE_ID)
 
-        if role in interaction.user.roles:
-            return await interaction.response.send_message(
-                "Tu es déjà vérifié ☕",
-                ephemeral=True
-            )
-
-        await interaction.user.add_roles(role)
-
-        await interaction.response.send_message(
-            "Vérification réussie ☕",
+    if role is None:
+        return await interaction.response.send_message(
+            "Rôle introuvable.",
             ephemeral=True
         )
 
+    if role in member.roles:
+        return await interaction.response.send_message(
+            "Tu es déjà vérifié ☕",
+            ephemeral=True
+        )
+
+    #  RETIRE LE RÔLE CHOISI
+     remove_role = guild.get_role(1504218303038623906)
+
+    if remove_role and remove_role in member.roles:
+        try:
+            await member.remove_roles(remove_role)
+        except Exception as e:
+            print("Erreur remove role:", e)
+
+    #  AJOUT DU RÔLE DE VÉRIFICATION
+    await member.add_roles(role)
+
+    await interaction.response.send_message(
+        "Vérification réussie ☕",
+        ephemeral=True
+    )
 # =========================
 # READY
 # =========================
