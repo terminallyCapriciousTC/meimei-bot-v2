@@ -631,14 +631,12 @@ async def verify(interaction: discord.Interaction):
     embed = discord.Embed(
         title="☕ Vérification",
         description=(
-            "Bienvenue dans notre monde plein de magie !\n\n"
-            "*Notre règlement est soumis aux conditions d'utilisation de la plateforme Discord.*\n\n"
-            "Clique sur le bouton ci-dessous pour accéder au serveur."
+            "En appuyant sur ce bouton, vous assumez avoir pris connaissance dudit règlement.\n\n"
         ),
-        color=discord.Color.from_rgb(111, 78, 55)
+        color=discord.Color.from_rgb(126, 86, 138)
     )
 
-    embed.set_footer(text="Prêt pour de nouvelles aventures ?")
+    embed.set_footer(text="Bon Café, Bonne Recherche !")
 
     await interaction.response.send_message(
         embed=embed,
