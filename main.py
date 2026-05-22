@@ -14,6 +14,9 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 EMBEDS_FILE = "/data/embeds.json"
 WELCOME_FILE = "/data/welcome.json"
 
+ROLE_ID = 1504214645584695397
+UNVERIFIED_ROLE_ID = 1504218303038623906
+
 embeds = {}
 welcome = {}
 sessions = {}
