@@ -403,32 +403,65 @@ async def edit(interaction: discord.Interaction, name: str):
     )
 
 class EmbedSelect(discord.ui.Select):
-    def __init__(self):
+
+    def __init__(self, target_channel):
+
+        self.target_channel = target_channel
+
         options = [
             discord.SelectOption(label=n, value=n)
             for n in embeds.keys()
-        ] or [discord.SelectOption(label="Aucun", value="none")]
+        ] or [
+            discord.SelectOption(label="Aucun", value="none")
+        ]
 
-        super().__init__(placeholder="Choisis un embed", options=options[:25])
+        super().__init__(
+            placeholder="Choisis un embed",
+            options=options[:25]
+        )
 
     async def callback(self, interaction: discord.Interaction):
+
         v = self.values[0]
 
         if v == "none":
-            return await interaction.response.send_message("Aucun embed", ephemeral=True)
+            return await interaction.response.send_message(
+                "Aucun embed",
+                ephemeral=True
+            )
 
-        await interaction.response.send_message(embed=embeds[v], ephemeral=True)
+        await self.target_channel.send(
+            embed=embeds[v]
+        )
+
+        await interaction.response.send_message(
+            f"Embed envoyé dans {self.target_channel.mention} ☕",
+            ephemeral=True
+        )
 
 
 class DropdownView(discord.ui.View):
-    def __init__(self):
+
+    def __init__(self, target_channel):
+
         super().__init__(timeout=60)
-        self.add_item(EmbedSelect())
+
+        self.add_item(
+            EmbedSelect(target_channel)
+        )
 
 
 @embed_group.command(name="show")
-async def show(interaction: discord.Interaction):
-    await interaction.response.send_message("Choisis", view=DropdownView(), ephemeral=True)
+async def show(
+    interaction: discord.Interaction,
+    channel: discord.TextChannel
+):
+
+    await interaction.response.send_message(
+        "Choisis un embed",
+        view=DropdownView(channel),
+        ephemeral=True
+    )
 
 
 class ConfirmDelete(discord.ui.View):
