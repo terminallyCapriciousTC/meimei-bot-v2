@@ -612,37 +612,31 @@ class VerifyView(discord.ui.View):
 @app_commands.checks.has_permissions(administrator=True)
 async def addbutton(
     interaction: discord.Interaction,
-    message_id: str
+    message_id: int
 ):
 
     try:
 
-        # Salon actuel
-        channel = interaction.channel
+        message = await interaction.channel.fetch_message(message_id)
 
-        # Récupération du message
-        message = await channel.fetch_message(int(message_id))
-
-        # On récupère l'ancien embed si présent
         embed = message.embeds[0] if message.embeds else None
 
-        # On modifie le message
         await message.edit(
             embed=embed,
             view=VerifyView()
         )
 
         await interaction.response.send_message(
-            "Bouton ajouté avec succès ☕",
+            "Bouton ajouté ☕",
             ephemeral=True
         )
 
     except Exception as e:
 
-        print("ADD BUTTON ERROR:", e)
+        print(e)
 
         await interaction.response.send_message(
-            "Impossible de trouver ce message.",
+            f"Erreur : {e}",
             ephemeral=True
         )
 
