@@ -605,6 +605,46 @@ class VerifyView(discord.ui.View):
             ephemeral=True
         )
 
+@bot.tree.command(
+    name="addbutton",
+    description="Ajoute le bouton de vérification à un message"
+)
+@app_commands.checks.has_permissions(administrator=True)
+async def addbutton(
+    interaction: discord.Interaction,
+    message_id: str
+):
+
+    try:
+
+        # Salon actuel
+        channel = interaction.channel
+
+        # Récupération du message
+        message = await channel.fetch_message(int(message_id))
+
+        # On récupère l'ancien embed si présent
+        embed = message.embeds[0] if message.embeds else None
+
+        # On modifie le message
+        await message.edit(
+            embed=embed,
+            view=VerifyView()
+        )
+
+        await interaction.response.send_message(
+            "Bouton ajouté avec succès ☕",
+            ephemeral=True
+        )
+
+    except Exception as e:
+
+        print("ADD BUTTON ERROR:", e)
+
+        await interaction.response.send_message(
+            "Impossible de trouver ce message.",
+            ephemeral=True
+        )
 
 @bot.event
 async def on_ready():
@@ -642,6 +682,7 @@ async def verify(interaction: discord.Interaction):
         embed=embed,
         view=VerifyView()
     )
+
 
 
 bot.run(os.environ["TOKEN"])
